@@ -23,16 +23,17 @@
                 </thead>
                 <tbody>
 
-                @foreach($allusers as $allusrs)
+                @foreach($allstudents as $students)
                     <tr>
-                        <td class="col">{{ $allusrs->id }}</td>
-                        <td class="col">{{ $allusrs->assessment_name }}</td>
-                        <td class="col">{{ $allusrs->banned }}</td>
-                        <td class="col">{{ $allusrs->banned }}</td>
+                        <td class="col">{{ $students->id }}</td>
+                        <td class="col">{{ $students->user_number }}</td>
+                        <td class="col">{{ $students->fullname }}</td>
+                        <td class="col">{{ $students->fullname }}</td>
+                        <td class="col">{{ $students->email }}</td>
+{{--                        <td class="col"><input type="number" class="form-control w-25 text-center" value="{{$students->score}}" disabled></td>--}}
 
-                        <td class="col"><input type="number" class="form-control w-25 text-center" value="78" disabled></td>
-
-                        <td class="col"><a href="{{route('student-reviews-and-score')}}" class="btn btn-primary" >Reviews and Score</a>
+                        {{--                                  @dd($allusrs['user']->id);--}}
+                        <td class="col"><a href="{{route('student-reviews-and-score', ['cid' => $courseid, 'sid' => $students->id, 'assesst_id' => $assesst_id])}}"class="btn btn-primary">Reviews and Score</a>
 
                         </td>
                         </td>

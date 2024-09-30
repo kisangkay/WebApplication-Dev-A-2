@@ -37,11 +37,9 @@
 
 <br><br>
             <ul class="list-group"><h3>Peer Review Assessments</h3>
-                <a href="{{route('assessment-details-page',[$course->id])}}" class="list-group-item list-group-item-action list-group-item-dark">Week 1 Introduction to Professionalism in ICT</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-dark">Week 2 Project Management in ICT</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-dark">Week 3 Legal Aspects of ICT</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-dark">Week 4 Communication in Teams Channel</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-dark">Week 5 Fundamentals of CyberSecurity</a>
+                @foreach($assesstthiscourse as $assessments)
+                <a href="{{route('assessment-details-page',['cid' =>$course->id, 'assesst_id' => $assessments->id])}}" class="list-group-item list-group-item-action list-group-item-dark">{{$assessments->assessment_name}}</a>
+                @endforeach
             </ul>
             <div class="text-center">
                 <h2 class="text-center mt-3">

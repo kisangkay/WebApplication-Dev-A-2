@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Assessment;
 use App\Models\Course;
 use App\Models\CourseData;
 use App\Models\User;
@@ -46,9 +47,10 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function teacher_show(string $id)
+    public function teacher_show(string $id,)
     {
         $course = Course::findOrFail($id);//getting course id from url
+        $assesstthiscourse = Assessment::where('id', $id)->get();//get all assessments with courseid $id
 
         //pick full names of users who are teachers and exist in the coursedata table and course table and COURSE ID IS FROM PAGE $id
         $fullnames = User::whereHas('CourseData', function ($query) use ($id) {
@@ -56,7 +58,8 @@ class CourseController extends Controller
         })->where('user_role', 'teacher')->get();
 
         return view('course-details-page-teacher')->with('course', $course) //FILTER COURSES WHERE TEACHER IS A TEACHER and stud
-        ->with('teachers', $fullnames);
+        ->with('teachers', $fullnames)
+        ->with('assesstthiscourse', $assesstthiscourse);
     }
 
     public function add_registered_student(string $id)

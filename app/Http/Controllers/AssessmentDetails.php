@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Assessment;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AssessmentDetails extends Controller
@@ -10,10 +11,15 @@ class AssessmentDetails extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id, $assesst_id)
     {
-        $allusers = Assessment::all();
-        return view('assessment-details-page')->with('allusers',$allusers);
+        $allassessments = Assessment::all();
+        $allstudents = User::where('user_role', 'student')->get(); //only retrieve for students
+        return view('assessment-details-page')
+            ->with('allassessments',$allassessments)
+            ->with('allstudents',$allstudents)
+            ->with('courseid', (int)$id)
+            ->with('assesst_id', (int)$assesst_id);
     }
 
     /**

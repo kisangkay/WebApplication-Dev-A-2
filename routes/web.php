@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EnrollDeenrollstudent;
 use App\Http\Controllers\AssessmentDetails;
+use App\Http\Controllers\ReviewsController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -28,7 +29,8 @@ Route::middleware('auth')->group(function () {//this group of functions require 
     Route::post('enroll/{cid}/{sid}', [EnrollDeenrollstudent::class, 'enroll'])->name('enroll-student');
     Route::post('deenroll/{cid}/{sid}', [EnrollDeenrollstudent::class, 'de_enroll'])->name('de-enroll-student');
 
-    Route::get('/courses/{id}/teacher/assessment-details-page', [AssessmentDetails::class, 'index'])->name('assessment-details-page');
+    Route::get('/courses/{cid}/teacher/assessment-details-page/{assesst_id}', [AssessmentDetails::class, 'index'])->name('assessment-details-page');
+    Route::get('/courses/{cid}/teacher/assessment-details-page/{assesst_id}/student-reviews-and-score/{sid}', [ReviewsController::class, 'index'])->name('student-reviews-and-score');
 
     Route::resource('user', SignupController::class);
 });
@@ -81,9 +83,9 @@ require __DIR__.'/auth.php';
         return view('manufacturer-specific-items');
     })->name('manufacturer-specific-items');
 
-    Route::get('/student-reviews-and-score', function () {
-        return view('student-reviews-and-score');
-    })->name('student-reviews-and-score');
+//    Route::get('/student-reviews-and-score', function () {
+//        return view('student-reviews-and-score');
+//    })->name('student-reviews-and-score');
 
     Route::get('/create-a-new-assessment', function () {
 
