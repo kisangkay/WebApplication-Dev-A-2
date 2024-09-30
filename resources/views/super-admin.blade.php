@@ -1,4 +1,4 @@
-@extends('layouts.menu-logged-in')
+@extends('layouts.menu-teacher')
 @section('content')
 
     {{-- Restricted page access to super admin on the route --}}
@@ -30,25 +30,25 @@
                         <td class="col">{{ $allusrs->banned }}</td>
 
                         <td class="col col-sm-2">
-                        <form method="post"
-                              action="{{ route('super-admin-ban-user', ['userid' => $allusrs->user_id])}}">
-                            @csrf
+                            <form method="post"
+                                  action="{{ route('super-admin-ban-user', ['userid' => $allusrs->user_id])}}">
+                                @csrf
                                 @if($allusrs->banned == 'no' && $allusrs->username != 'admin')
-                                <button class="btn btn-danger bi bi-ban"> Ban user</button>
+                                    <button class="btn btn-danger bi bi-ban"> Ban user</button>
                                 @else
                                     <button class="btn btn-danger bi bi-ban" disabled> Ban user</button>
                                 @endif
-                        </form>
-                            </td>
+                            </form>
+                        </td>
                         <td>
                             <form method="post"
                                   action="{{ route('super-admin-unban-user', ['userid' => $allusrs->user_id])}}">
                                 @csrf
-                                    @if($allusrs->banned != 'no' && $allusrs->username != 'admin')
-                                        <button class="btn btn-success bi bi-check-circle"> Unban user</button>
-                                    @else
-                                        <button class="btn btn-success bi bi-check-circle" disabled> Unban user</button>
-                                    @endif
+                                @if($allusrs->banned != 'no' && $allusrs->username != 'admin')
+                                    <button class="btn btn-success bi bi-check-circle"> Unban user</button>
+                                @else
+                                    <button class="btn btn-success bi bi-check-circle" disabled> Unban user</button>
+                                @endif
                             </form>
                         </td>
                     </tr>

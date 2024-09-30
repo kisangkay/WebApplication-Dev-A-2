@@ -12,9 +12,6 @@
 //        return redirect(route('login'));
 //    })->name('logout_action');
 //
-////    Route::get('/home', function () { //I OVERWROTE THIS ROUTE
-////        return view('home');
-////    })->name('home');
 //
 ////WE RETURN THE CREATE BIKE PAGE WITH A LIST OF ALL MANUFACTURERS TO PICK FROM
 //    Route::get('/create-a-new-item', function () {
@@ -36,17 +33,11 @@
 //
 //    }
 //
-////    Route::get('/all-manufacturers', function () {
-////        return view('all-manufacturers');
-////    })->name('all-manufacturers');
 //
 //    Route::get('/manufacturer-specific-items', function () {
 //        return view('manufacturer-specific-items');
 //    })->name('manufacturer-specific-items');
 //
-////    Route::get('/item-review-page', function () {
-////        return view('item-review-page');
-////    })->name('item-review-page');
 //
 //    Route::get('/signup', function () {
 //        return view('.login-signup/signup');
@@ -167,11 +158,6 @@
 //        //the db data stored in $items variable is then accessed from view using the variable name 'items'
 //        //so its different from a session since its not stored across views
 //    })->name('home_sort_top_Reviews_asc');
-//
-//
-//
-//
-//
 //
 //
 //

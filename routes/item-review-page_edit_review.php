@@ -1,6 +1,6 @@
 <?php
     // USER EDITING THEIR REVIEW
-    Route::post('/item-review-update-action/{bicycle_id}', function ($bicycle_id) {
+    Route::post('/item-review-update-action/{id}', function ($bicycle_id) {
 
         //we still use the placeholder {bicycle_id} in the url to pass the id again as an associative array in the return
         $newreviewtext = request('new-review-text');

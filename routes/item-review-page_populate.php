@@ -1,18 +1,18 @@
 <?php
 
     //ITEM REVIEW PAGE ROUTE 1 my route to POPULATE review page with the item and reviews matching that bicycleid
-    Route::get('/item-review-page/{bicycle_id}', function ($bicycle_id) {
+    Route::get('/item-review-page/{id}', function ($id) {
 
         //to check if user already has another review
         $currentuserid = session('user_id');
 //        dd($currentuserid);
         $sql = "select * from reviews, review_users where reviews.review_creator_id = ?
                                   and reviews.bicycle_id_being_reviewed = ? ";
-        $leetsexecute = DB::select($sql, array($currentuserid, $bicycle_id));
+        $leetsexecute = DB::select($sql, array($currentuserid, $id));
 
 //LETS ALSO GET THE IMAGE PATH FROM THE DATABASE
         $GETIMAGEPATH = "select bicycle_image from bicycles where bicycle_id = ?";
-        $foundbikeimagepath = DB::select($GETIMAGEPATH, array($bicycle_id));
+        $foundbikeimagepath = DB::select($GETIMAGEPATH, array($id));
 
 //TO SHOW MANUFACTURER NAME TOO I NEED TO JOIN BICYCLE ID AND MANUFACTURER TABLE TO SHOW BIKE IMAGE AND MANUF NAME OH I DID THAT IN THE get_bicycle function
 
@@ -20,9 +20,9 @@
             //so we return all found items and reviews once again, but we also
             // include the result of $foundbikeimagepath to check if its not empty then we do
 //USER HAS A REVIEW FOR THE BIKE
-            $itemfound = get_bicycle_and_manufacturer_name($bicycle_id);
-            $reviewsfound = get_allreviews($bicycle_id);
-            $reviewtextforloggedusertoedit = get_specificreviews($bicycle_id, $currentuserid); //getting current user's review to only edit it
+            $itemfound = get_bicycle_and_manufacturer_name($id);
+            $reviewsfound = get_allreviews($id);
+            $reviewtextforloggedusertoedit = get_specificreviews($id, $currentuserid); //getting current user's review to only edit it
             $hasedited = false;
 
 //using return view and with, it passes data directly to the view. accessible as a variable. not session
@@ -39,7 +39,7 @@
             //if we find a record, then we disable the submit button
         } else {
 //USER HAS NO REVIEW FOR THE BIKE STILL POPULATE THE PAGE BUT DIFFERENCE IS PASSING HASREVIEWS WHICH IS NOW FALSE AND IN THAT PAGE WE HAVE IF STMT FOR THAT
-            $itemfound = get_bicycle_and_manufacturer_name($bicycle_id);
+            $itemfound = get_bicycle_and_manufacturer_name($id);
             $reviewsfound = get_allreviews($bicycle_id);
             return view('item-review-page') //return the view with both the selected bicycle and ALL its found reviews
             ->with('items', $itemfound)
@@ -50,7 +50,7 @@
 //I FORGOT TO ALSO ADD THE NEW IMAGEPATH IF USER HAS NOT EXISTING REVIEW, FAILED TO NOTICE THIS AND WAS STUCK FOR HOURS
 
         }//closing the if statement
-    })->name('item-review-page/{bicycle_id}');
+    })->name('item-review-page/{id}');
 
     // AGAIN TO SHOW MANUFACTURER NAME TOO I NEED TO JOIN BICYCLE ID AND MANUFACTURER TABLE TO SHOW BIKE IMAGE AND MANUF NAME
     function get_bicycle_and_manufacturer_name($bicycle_id)

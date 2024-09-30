@@ -1,26 +1,25 @@
 <?php
 
-
     //LOGIN ROUTE TO SEND YOU TO HOME PAGE IF YOU EXIST IN DB
     Route::post('/checkifusername_exists_action', function () {
         $user_name = request('username');
 
 //        dd($user_name);
-//VALIDATIONNNNNNNNNN LOGIN
-        if (!$user_name) { //Empty, <2 in length or 0 value
-            return redirect()->route('signup')->with('validationerror', 'PLease provide a username!');
-        } elseif (strlen($user_name) < 2 || strlen($user_name) > 9) {
-            return redirect()->route('signup')->with('validationerror', 'Please use a username between 3 to 9 characters!');
-        } //To check for these illegal chars
-        elseif ($user_name) {
-            $illegal_chars = "-_+\"'";
-            $user_name_characters = str_split($user_name); //makes an array of each chars in the username
-            foreach ($user_name_characters as $character) { //check if each char matches the defined
-                if (strpos($illegal_chars, $character) == true) { //$character is a single char of each value in the username
-                    return redirect()->route('login')->with('validationerror', 'Username cant contain any of: - _ + " \'');
-                }
-            }
-        }
+//VALIDATION LOGIN
+//        if (!$user_name) { //Empty, <2 in length or 0 value
+//            return redirect()->route('signup')->with('validationerror', 'PLease provide a username!');
+//        } elseif (strlen($user_name) < 2 || strlen($user_name) > 9) {
+//            return redirect()->route('signup')->with('validationerror', 'Please use a username between 3 to 9 characters!');
+//        } //To check for these illegal chars
+//        elseif ($user_name) {
+//            $illegal_chars = "-_+\"'";
+//            $user_name_characters = str_split($user_name); //makes an array of each chars in the username
+//            foreach ($user_name_characters as $character) { //check if each char matches the defined
+//                if (strpos($illegal_chars, $character) == true) { //$character is a single char of each value in the username
+//                    return redirect()->route('login')->with('validationerror', 'Username cant contain any of: - _ + " \'');
+//                }
+//            }
+//        }
 
 //IF USERNAMEFOUND TO LOGIN
         $usernamefound = get_username($user_name);

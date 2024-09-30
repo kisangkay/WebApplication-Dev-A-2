@@ -3,7 +3,7 @@
     //to add a user review, we take the text from the form, and rating out of 5
     //i had to use the same route name as in the template so as i will be redirected to the same pag
     //while making use of the {} placeholder to reload to the same item id page as the review was submitted for the bike
-    Route::post('/item-review-page/{bicycle_id}', function ($bicycle_id) {
+    Route::post('/item-review-page/{id}', function ($bicycle_id) {
 
 
         //we still use the placeholder {bicycle_id} in the url to pass the id again as an associative array in the return

@@ -10,6 +10,15 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    public function courseData() //function to link course model to course data model,... to retrieve the courses a user is enrolled
+    {
+        return $this->hasMany(CourseData::class,'user_id'); //coursedata table is related to user in that
+        //one user can have many entries of coursedata
+        //now I can easily retrieve all CourseData records for a user
+
+//        $user = User::find($userId);
+//        $coursesData = $user->courseData; // This will give you all related CourseData entries
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +26,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'user_number',
+        'fullname',
         'email',
         'password',
     ];

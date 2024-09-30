@@ -1,6 +1,6 @@
 <?php
     // USER DELETING THEIR REVIEW
-    Route::post('/delete-review/{bicycle_id}', function ($bicycle_id) {
+    Route::post('/delete-review/{id}', function ($bicycle_id) {
 
         $result = delete_review($bicycle_id);
         $current_userid = session('user_id');
