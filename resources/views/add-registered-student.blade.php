@@ -1,4 +1,4 @@
-@extends('layouts.menu-teacher')
+@extends(auth()->user()->user_role === 'teacher' ? 'layouts.menu-teacher' : 'layouts.menu-student')
 @section('content')
 
     {{-- Restricted page access to super admin on the route --}}
@@ -36,7 +36,7 @@
                             <form method="post"
 {{--                                  @dd($allusrs['courseid']);--}}
 {{--                                  @dd($allusrs['user']->id);--}}
-                                action="{{route('de-enroll-student', ['cid' => $allusrs['courseid'], 'sid' => $allusrs['user']->id])}}">
+                                action="{{route('de-enroll-student', ['cid' => $allusrs['courseid'], 'sid' => $allusrs['user']->user_number])}}">
                                 @csrf
                                 @if($allusrs['enrolled'])
                                     <button class="btn btn-danger bi bi-ban"> De-enroll</button>
@@ -47,7 +47,7 @@
                         </td>
                         <td>
                             <form method="post"
-                                  action="{{route('enroll-student', ['cid' => $allusrs['courseid'], 'sid' => $allusrs['user']->id])}}">
+                                  action="{{route('enroll-student', ['cid' => $allusrs['courseid'], 'sid' => $allusrs['user']->user_number])}}">
 {{--                                  action="{{ route('super-admin-unban-user', ['userid' => $allusrs->user_id])}}">--}}
                                 @csrf
                                 @if(!$allusrs['enrolled'])

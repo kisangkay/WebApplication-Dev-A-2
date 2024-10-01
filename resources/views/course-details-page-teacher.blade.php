@@ -17,8 +17,9 @@
                                 </div>
 
                                 <ul class="list-group">
-                                    @foreach($teachers as $teacher) @endforeach
+                                    @foreach($teachers as $teacher)
                                     <h6 class="list-group-item">{{$teacher->fullname}}</h6>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -38,13 +39,14 @@
 <br><br>
             <ul class="list-group"><h3>Peer Review Assessments</h3>
                 @foreach($assesstthiscourse as $assessments)
-                <a href="{{route('assessment-details-page',['cid' =>$course->id, 'assesst_id' => $assessments->id])}}" class="list-group-item list-group-item-action list-group-item-dark">{{$assessments->assessment_name}}</a>
+                <a href="{{route('assessment-details-page',['cid' =>$course->id, 'assesst_id' => $assessments->id])}}" class="list-group-item list-group-item-action list-group-item-dark">{{$assessments->assessment_name}}
+                <span>{{$assessments->due_date}}</span></a>
                 @endforeach
             </ul>
             <div class="text-center">
                 <h2 class="text-center mt-3">
-                    <a href="{{route('create-a-new-assessment')}}"
-                       class="btn btn-primary mb-2"
+                    <a href="{{route('create-new-assessment',['cid' =>$course->id])}}"
+                        class="btn btn-primary mb-2"
                        type="button">
                         Add New Assessment
                         <i class="bi bi-plus-circle"></i>

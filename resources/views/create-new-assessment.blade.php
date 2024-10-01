@@ -11,7 +11,7 @@
     <div class="container " id="custom-cards">
         <h2 class="py-4 text-center">Create a New Assessment</h2>
 
-        <form method="post" action="{{route('create-new-bicycle')}}" class="m-auto form-signin" style="width:auto"
+        <form method="post" action="" class="m-auto form-signin" style="width:auto"
               enctype="multipart/form-data">
             @csrf
             <h5 class="text-center ">Assessment Title</h5>

@@ -31,8 +31,8 @@
 
                         <div class="text-center">
 {{--                            <small class="fw-bold text-info px-2">Assessments: {{$course->bicycle_total_reviews}}</small>--}}
-{{--                            <small class="fw-bold text-success px-2">Total Teachers: {{$course->bicycle_total_reviews}}</small>--}}
-{{--                            <small class="fw-bold text-warning px-2">Total Students: {{$course->bicycle_total_reviews}}</small>--}}
+{{--                            <small class="fw-bold text-success px-2">Total Teachers: {{$course->xxxx}}</small>--}}
+{{--                            <small class="fw-bold text-warning px-2">Total Students: {{$course->xxx}}</small>--}}
                         </div>
                     </a>
 
