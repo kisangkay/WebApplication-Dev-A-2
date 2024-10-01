@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <a class="px-5 d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <a class="bi bi-people fs-1"  style="margin-right: 6px"></a>
-            <span class="fs-4" style="margin-right: 10px">PRManager</span>
+            <span class="fs-4 text-light" style="margin-right: 10px">PRManager</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbtoggle" aria-expanded="false">
             <span class="navbar-toggler-icon"></span>

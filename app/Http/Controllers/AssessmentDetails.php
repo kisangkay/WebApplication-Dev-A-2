@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\Assessment;
 
+use App\Models\AssessmentScore;
+use App\Models\CourseData;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,16 +14,179 @@ class AssessmentDetails extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $id, $assesst_id)
+    public function index(int $cid, $assesst_id)
     {
-        $allassessments = Assessment::all();
-        $allstudents = User::where('user_role', 'student')->get(); //only retrieve for students
-        return view('assessment-details-page')
-            ->with('allassessments',$allassessments)
-            ->with('allstudents',$allstudents)
-            ->with('courseid', (int)$id)
-            ->with('assesst_id', (int)$assesst_id);
+        //TO DISABLE EDIT BUTTON FOR TEACHER IF A REVIEW EXISTS ALREADY
+        $isthereanyreview = Review::where('course_id', $cid)
+        ->where('assessment_id', $assesst_id)
+        ->first();
+
+        $assessmentdetails = Assessment::where('id', $assesst_id)->get();
+        // Get all users enrolled in the course from CourseData where course_id and assessment_id match
+        $courseData = CourseData::with(['user']) // Eager load user details
+        ->where('course_id', $cid)
+            ->whereHas('user', function ($query) {
+                $query->where('user_role', 'student'); // Filter based on user_role in the User model
+            })
+            ->get();
+
+        // Initialize the grouped results array
+        $groupedResults = [];
+
+        // Process the users in courseData
+        foreach ($courseData as $data) {
+            $user_number = $data->user->user_number;
+
+            // Count the number of reviews submitted by and received by this user for the given assessment
+            $review_submitted_c = Review::where('reviewer_user_number', $user_number)
+                ->where('assessment_id', $assesst_id)
+                ->where('course_id', $cid)
+                ->count();
+
+            $review_received_c = Review::where('reviewee_user_number', $user_number)
+                ->where('assessment_id', $assesst_id)
+                ->where('course_id', $cid)
+                ->count();
+
+            // Retrieve scores for this user for the given assessment
+            $scores = AssessmentScore::where('user_number', $user_number)
+                ->where('assessment_id', $assesst_id)
+                ->where('course_id', $cid)
+                ->get();
+
+            // Add user data, scores, and review counts to the groupedResults array
+            if (!isset($groupedResults[$user_number])) {
+                $groupedResults[$user_number] = [
+                    'user' => $data->user, // User details from the user relation
+                    'scores' => $scores, // User's scores
+                    'reviews' => [], // Placeholder for review data (optional)
+                    'review_submitted_count' => $review_submitted_c, // Count of reviews submitted
+                    'review_received_count' => $review_received_c, // Count of reviews received
+                ];
+            }
+        }
+        // Return the data to the view
+        return view('assessment-details-page-teacher')
+            ->with('groupedResults', $groupedResults)
+            ->with('cid', $cid)
+            ->with('assesst_id', $assesst_id)
+            ->with('assesst_details', $assessmentdetails[0])
+            ->with('isthereanyreview',$isthereanyreview);//if there is any review, we sidable assessment edit button
+
     }
+
+    public function update( int $cid, $assesst_id, Request $request)
+    {
+        $Assessment_instruction = $request->input('instruction');
+        $due_dates = $request->input('due_date');
+        $reviews_requireds = $request->input('reviews_required');
+        $max_scores = $request->input('max_score');
+
+        $current_record = Assessment::where('id', $assesst_id)//to update, first retrieve score
+            ->where('course_id', $cid)//figured i dont need this here
+            ->first();
+//        dd($sid);
+        $current_record->update([
+            'assessment_instruction' => $Assessment_instruction,
+        'due_date' => $due_dates,
+        'reviews_required' => $reviews_requireds,
+        'max_score' => $max_scores,
+        ]);
+
+        return back()->with('feedback', 'Assessment Updated');
+    }
+//    RETURN VIEW STUDENT///////////////////////////////////////////////////
+    public function index_student(int $cid, $assesst_id)
+    {
+
+//TO LIST ALL REVIEWS LOGGED IN USER HAS RECEIVED FOR THISS ASSESSMENT AND COURSE
+        $reviewer_id_logged_in = auth()->user()->user_number; //get reviewer snumber
+
+        $myreviews = Review::with(['reviewer'])//loading the relationship to user model inside the Review model to get full reviewer details
+            ->where('reviewee_user_number', $reviewer_id_logged_in)//will join with User model to get reviewer fullname
+            ->where('assessment_id', $assesst_id)
+            ->where('course_id', $cid)
+            ->get();//to return all entries then i loop over
+
+//Count reviews by logged in user to check agains required totals per student
+        $my_total_reviews = Review::where('reviewer_user_number', $reviewer_id_logged_in)
+            ->where('assessment_id', $assesst_id)
+            ->where('course_id', $cid)
+            ->count();
+
+//so $myreviews->reviewer_user_number would be my reviewer now I need to GET ITS RELEVANT Fullname from User Model
+
+//SHOWING STUDENTS ENROLLED IN THE COURSE AND USERROLE STUDENTS
+        $students_andcourse_inthiscourse = CourseData::with(['user'])
+            ->where('course_id', $cid)
+            ->whereHas('user', function ($query) {
+                $query->where('user_role', 'student'); // Filter based on user_role in the User model
+            })->get();
+
+
+        $assessmentdetails = Assessment::where('id', $assesst_id)->get();
+        // Get all users enrolled in the course from CourseData where course_id and assessment_id match
+        $courseData = CourseData::with(['user'])// load user details
+        ->where('course_id', $cid)
+            ->whereHas('user', function ($query) {
+                $query->where('user_role', 'student'); // Filter based on user_role in the User model
+            })
+            ->get();
+
+        // Initialize the grouped results array
+        $groupedResults = [];
+
+        // Process the users in courseData
+        foreach ($courseData as $data) {
+            $user_number = $data->user->user_number;
+
+            // Count the number of reviews submitted by and received by this user for the given assessment
+            $review_submitted_c = Review::where('reviewer_user_number', $user_number)
+                ->where('assessment_id', $assesst_id)
+                ->where('course_id', $cid)
+                ->count();
+
+
+            $review_received_c = Review::where('reviewee_user_number', $user_number)
+                ->where('assessment_id', $assesst_id)
+                ->where('course_id', $cid)
+                ->count();
+
+            // Retrieve scores for this user for the given assessment
+            $scores = AssessmentScore::where('user_number', $user_number)
+                ->where('assessment_id', $assesst_id)
+                ->where('course_id', $cid)
+                ->get();
+
+            // Add user data, scores, and review counts to the groupedResults array
+            if (!isset($groupedResults[$user_number])) {
+                $groupedResults[$user_number] = [
+                    'user' => $data->user, // User details from the user relation
+                    'scores' => $scores, // User's scores
+                    'reviews' => [], // Placeholder for review data (optional)
+                    'review_submitted_count' => $review_submitted_c, // Count of reviews submitted
+                    'review_received_count' => $review_received_c, // Count of reviews received
+                ];
+            }
+        }
+//        dd($studentsinthiscourse);
+        // Return the data to the view
+        return view('assessment-details-page-student')
+            ->with('groupedResults', $groupedResults)
+            ->with('cid', $cid)
+            ->with('assesst_id', $assesst_id)
+            ->with('assesst_details', $assessmentdetails[0])
+            ->with('myreviews', $myreviews)
+            ->with('my_total_reviews', $my_total_reviews)//COUNT OF REVIEWS FROM THIS USER TO COMPARE WITH MAX
+            ->with('students_and_course_inthiscourse',$students_andcourse_inthiscourse);//need to run a loop for each array and another loop for each user
+    }
+
+    public function edit(int $cid, $assesst_id)
+    {
+
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,22 +208,6 @@ class AssessmentDetails extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
     {
         //
     }

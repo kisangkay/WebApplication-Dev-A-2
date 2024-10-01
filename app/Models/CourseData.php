@@ -13,9 +13,14 @@ class CourseData extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_number', 'user_number');
+    }
+
     protected $fillable = [
         'course_id',
-        'user_id',
+        'user_number',
         'assessment_id',
     ];
 }

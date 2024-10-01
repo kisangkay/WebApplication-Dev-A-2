@@ -1,4 +1,4 @@
-@extends('layouts.menu-teacher')
+@extends(auth()->user()->user_role === 'teacher' ? 'layouts.menu-teacher' : 'layouts.menu-student')
 @section('content')
     <div class="b-divider"></div>
 
@@ -8,10 +8,19 @@
             {{ session('validationerror') }}
         </div>
     @endif
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('/')}}">Home</a></li>
+            <li class="breadcrumb-item active"><a href="#" onclick="history.back();">Courses Details Page</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+        </ol>
+    </nav>
+
     <div class="container " id="custom-cards">
         <h2 class="py-4 text-center">Create a New Assessment</h2>
 
-        <form method="post" action="{{route('create-new-bicycle')}}" class="m-auto form-signin" style="width:auto"
+        <form method="post" action="" class="m-auto form-signin" style="width:auto"
               enctype="multipart/form-data">
             @csrf
             <h5 class="text-center ">Assessment Title</h5>
