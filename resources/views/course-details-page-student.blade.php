@@ -1,15 +1,14 @@
-@php use Carbon\Carbon; @endphp
-{{--we need this carbon class to create an object of the datetime from database to match a specific format --}}
-@extends('layouts.menu-teacher')
-
+@extends(auth()->user()->user_role === 'teacher' ? 'layouts.menu-teacher' : 'layouts.menu-student')
 @section('content')
     <div class="b-divider"></div>
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{route('/')}}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+            <li class="breadcrumb-item"><a href="{{url()->previous() }}">Home</a></li>
+            <li class="breadcrumb-item active">Course Details Page</li>
         </ol>
     </nav>
+
     <div class="container py-5">
         {{--        <div class="h2 px-2 text-center">Reviews for {{$items[0]->bicycle_name}}--}}
         <div class="text-center">
@@ -34,15 +33,14 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Enrol/De-enroll a Registered Student</h5>
+                            <h5 class="card-title text-warning">Announcements</h5>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <a href="{{route('add_registered_student',$course->id)}}" class="btn btn-primary">Add
-                                Student</a>
+                            <span class="list-group-item">Please check the updated due date and time</span>
                         </ul>
                         <ul class="list-group list-group-flush">
                             <a href="{{route('top-reviewers')}}"
-                               class="btn btn-success mt-2 list-group-item-success text-light">
+                               class="list-group-item list-group-item-action list-group-item-info text-light">
                                 Top Students Leaving Useful Reviews
                             </a>
                         </ul>
@@ -53,26 +51,12 @@
             <br><br>
             <ul class="list-group"><h3>Peer Review Assessments</h3>
                 @foreach($assesstthiscourse as $assessments)
-                    <a href="{{route('assessment-details-page-teacher',['cid' =>$course->id, 'assesst_id' => $assessments->id])}}"
+                    <a href="{{route('assessment-details-page-student',['cid' =>$course->id, 'assesst_id' => $assessments->id])}}"
                        class="list-group-item list-group-item-action list-group-item-dark">{{$assessments->assessment_name}}
-                        {{-- using CARBON which is subclass of php datetime from LARAVEL --}}
-                        {{-- using format() function of datetime object to create a string readable INSIDE FORMAT i specify the format to month, date, year, hour mins, am/pm   --}}
-                        <span
-                            class="text-success">Due: {{ Carbon::parse($assessments->due_date)->format('F j, Y, g:i A') }}</span>
+                        <span class="text-success text-emphasis">Due: {{ \Carbon\Carbon::parse($assessments->due_date)->format('F j, Y, g:i A') }}</span>
                     </a>
                 @endforeach
             </ul>
-            <div class="text-center">
-                <h2 class="text-center mt-3">
-                    <a href="{{route('create-new-assessment',['cid' =>$course->id])}}"
-                       class="btn btn-primary mb-2"
-                       type="button">
-                        Add New Assessment
-                        <i class="bi bi-plus-circle"></i>
-                    </a>
-                </h2>
-            </div>
-            <br>
         </div>
 
 @endsection

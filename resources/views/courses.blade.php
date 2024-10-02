@@ -1,8 +1,14 @@
 @extends(auth()->user()->user_role === 'teacher' ? 'layouts.menu-teacher' : 'layouts.menu-student')
-{{--used ternary operator for my if statement as @if wont work with extends condition ? value_if_true : value_if_false;--}}
-
+{{--I went with the shorthand version of an if statememt ternary as i dont have a complex nested conditions--}}
 @section('content')
     <div class="b-divider"></div>
+
+    @if(session('feedback'))
+        <div class=" h6 alert alert-danger border-bottom text-center text-light" style="font-weight: bold" role="alert">
+            {{ session('feedback') }}
+        </div>
+    @endif
+{{--if not correct userrole, checkuserrole middleware will use this feedback--}}
 
     <div class="container px-4 py-2" id="custom-cards">
         <h2 class="text-center">{{$whichrole}}</h2>
@@ -31,8 +37,8 @@
 
                         <div class="text-center">
 {{--                            <small class="fw-bold text-info px-2">Assessments: {{$course->bicycle_total_reviews}}</small>--}}
-{{--                            <small class="fw-bold text-success px-2">Total Teachers: {{$course->bicycle_total_reviews}}</small>--}}
-{{--                            <small class="fw-bold text-warning px-2">Total Students: {{$course->bicycle_total_reviews}}</small>--}}
+{{--                            <small class="fw-bold text-success px-2">Total Teachers: {{$course->xxxx}}</small>--}}
+{{--                            <small class="fw-bold text-warning px-2">Total Students: {{$course->xxx}}</small>--}}
                         </div>
                     </a>
 

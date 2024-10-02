@@ -1,58 +1,57 @@
-<x-guest-layout>
+@extends('layouts.root')
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-
+<div class="container form-signin mt-5">
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
-{{--        <div>--}}
-{{--            <x-input-label for="email" :value="__('Email')" />--}}
-{{--            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />--}}
-{{--            <x-input-error :messages="$errors->get('email')" class="mt-2" />--}}
-{{--        </div>--}}
-        <!-- Student number -->
         <div>
-            <x-input-label for="user_number" :value="__('Student/Teacher Number')" />
-            <x-text-input id="user_number" class="block mt-1 w-full" type="number" name="user_number" :value="old('user_number')" autofocus autocomplete="user_number" />
-            <x-input-error :messages="$errors->get('user_number')" class="mt-2" />
+            <h1 class="bi bi-people text-center mt-5"> Welcome to Peer Reviews Manager</h1>
+        </div>
+        <div>
+            <label for="user_number">Student/Teacher Number</label>
+            <input id="user_number" class="form-control" type="number" name="user_number" :value="old('user_number')" autofocus autocomplete="user_number" />
+
+            <div>
+                @if($errors->get('user_number'))
+                    <div class="text-danger mt-2">
+                        @foreach ($errors->get('user_number') as $message)
+                            {{ $message }}<br>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+
         </div>
 
         <!-- Password -->
         <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
+            <label for="password">Password</label>
+            <input class="form-control " id="password" class="block mt-1 w-full"
                             type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                            name="password" autocomplete="current-password" />
         </div>
 
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
+                <span class="text-light">Remember me</span>
             </label>
         </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-yellow-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-                <a class="underline text-sm text-green-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register') }}">
-                    {{ __('Register') }}
-                </a>
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Log in</button><br>
         </div>
-    </form>
+        <div class="d-flex justify-content-center  mt-4">
+            @if (Route::has('password.request'))
+                <a class="px-2 text-decoration-none" href="{{ route('password.request') }}">Forgot your password?</a>
+            @endif
+            <a class="text-sm text-decoration-none" href="{{ route('register') }}">Register</a>
+        </div>
 
-</x-guest-layout>
+
+    </form>
+</div>
+
