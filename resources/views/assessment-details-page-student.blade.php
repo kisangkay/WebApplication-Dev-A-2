@@ -141,7 +141,19 @@
                                 <div class="container d-flex justify-content-center">
                                     <input type="range" name="reviewee_is_rating_as" class="form-range mt-4 w-50" value="{{$individual_review->reviewee_rated}}"
                                            min="1" max="5" id="range">
-                                </div>
+                                </div> 
+
+
+                        <div class="container w-75">
+                            <label class="h4" for="reviewer_comment">Review Text</label>
+                     
+                            <textarea class="form-control mb-4" name="reviewer_comment" id="reviewer_comment"rows="1" placeholder="In a few words, how was this reviewer?">{{ old('reviewer_comment') }}</textarea>
+                            <x-input-error :messages="$errors->get('reviewer_commemt)"/>
+                        </div>
+
+
+
+
                                 {{--HIDDEN INPUT TO PASS REVIEWER_ID TO FORM FOR SUBMISSION TO DB --}}
                                 <input class="invisible" value="{{$individual_review->reviewer->user_number}}" name="reviewer_id">
                                 {{--LOCATION HAS TO MATCH REVIEWER_ID REVIEWEE_ID ASSESST_ID AND COURSE_ID --}}
