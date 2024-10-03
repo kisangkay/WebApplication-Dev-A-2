@@ -13,7 +13,7 @@
         {{--        <div class="h2 px-2 text-center">Reviews for {{$items[0]->bicycle_name}}--}}
         <div class="text-center">
             {{--            @dd($course->course_name);--}}
-            <h2 class=" text-info mb-4">{{$course->course_name}} {{$course->course_code}} Course Page</h2>
+            <h2 class="h2 text-info mb-4">{{$course->course_name}} {{$course->course_code}} Course Page</h2>
             {{--            <h1>{{ $course->course_code }}</h1>--}}
             <div class="row  row-cols-1 row-cols-md-2 g-4">
                 <div class="col">
@@ -49,7 +49,7 @@
             </div>
 
             <br><br>
-            <ul class="list-group"><h3>Peer Review Assessments</h3>
+            <ul class=" list-group"><h3 class="h3">Peer Review Assessments</h3>
                 @foreach($assesstthiscourse as $assessments)
                     <a href="{{route('assessment-details-page-student',['cid' =>$course->id, 'assesst_id' => $assessments->id])}}"
                        class="list-group-item list-group-item-action list-group-item-dark">{{$assessments->assessment_name}}

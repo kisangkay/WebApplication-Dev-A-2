@@ -27,26 +27,6 @@
                 return view('courses')->with('courses_for_this_user', $courses_for_this_user)->with('whichrole', 'Your Enrolled Courses');
             }
         }
-
-        /**
-         * Show the form for creating a new resource.
-         */
-        public function create()
-        {
-            //
-        }
-
-        /**
-         * Store a newly created resource in storage.
-         */
-        public function store(Request $request)
-        {
-            //
-        }
-
-        /**
-         * Display the specified resource.
-         */
         public function teacher_show(int $id,)//populates course details page for teacher
         {
             $course = Course::findOrFail($id);//getting course id from url
@@ -65,9 +45,9 @@
                 ->with('assesstthiscourse', $assesstthiscourse);
         }
 
-        public function add_registered_student(int $id)
+        public function add_registered_student(int $id)//Enroll a registered student
         {
-            $allusers = User::where('user_role', 'student')->paginate(10);
+            $allusers = User::where('user_role', 'student')->paginate(10);//we only show students userrole
 
 
             $this_course_name_for_header = CourseData::with('course')//list specific course name matching $cid

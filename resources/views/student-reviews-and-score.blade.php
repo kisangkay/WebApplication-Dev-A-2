@@ -74,7 +74,8 @@
             @endif
 
             <h4 class="text-center text-light my-2">Assessment Score for {{$reviewer_all_data->fullname}}</h4>
-            <input type="number" class="form-control text-center w-100 my-2" name="score" placeholder="/100" value="{{ optional($assessment_score)->score }}">
+            <input value="{{ old('assessment_title', optional ($assessment_score)->score)  }}" name="score" type="text" class="form-control text-center w-100 my-2"  placeholder="/100" >
+                    <x-input-error :messages="$errors->get('score')"/>
 
             @if($assessment_score)
                 <button class="btn btn-warning w-100 mb-4 bi bi-upload" type="submit"> Edit Score</button>

@@ -2,9 +2,9 @@
 @section('content')
     <div class="b-divider"></div>
     <div class="container ">
-        <h2 class="py-4 text-center border-bottom">All Registered Students</h2>
+        <h2 class="h2 py-4 text-center border-bottom">All Registered Students</h2>
 {{--in controller we getting by first() so no need to loop over one record--}}
-        <h4 class="text-center border-bottom">Enroll A Registered Student to <span class="text-info">{{$this_course_name_for_header->course->course_name}}</span></h4>
+        <h4 class="h4 text-center border-bottom">Enroll A Registered Student to <span class="text-info">{{$this_course_name_for_header->course->course_name}}</span></h4>
         @if(session('feedback'))
             <div class=" h6 alert alert-warning border-bottom text-center text-light" role="alert">
                 {{ session('feedback') }}
@@ -27,11 +27,11 @@
             <form method="post" action="{{route('enroll-student')}}">
                 @csrf
 
-                <div class="container w-50">
-
+                <div class="container w-50 text-center">
+                    <x-input-error :messages="$errors->get('student_number')" class="mt-2 text-red-500" />
                     <div class="container d-flex justify-content-center w-50">
 {{--  Student number should not be null on input validation --}}
-                        <input name="student_id_to_add" id="student_id_to_add" class="form-control text-light" style="background-color: rgba(41,173,224,0.3)" type="number" placeholder="Student Number">
+                        <input name="student_number" value="{{old('student_id_to_add')}}"class="form-control text-light" style="background-color: rgba(41,173,224,0.3)" type="text" placeholder="Student Number">
                         <button class="btn btn-primary bi bi-check-circle w-50 ms-3"> Enroll</button>
                     </div>
                     <input name="course_id" class="invisible" value="{{$cid}}">

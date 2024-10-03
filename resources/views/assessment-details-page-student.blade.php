@@ -23,10 +23,10 @@
     <div class="b-divider"></div>
     <div class="container ">
         <h4 class="py-4 text-center border-bottom">Assessment: <span class="text-success">{{$assesst_details->assessment_name}}</span> Details Page</h4>
-        <h4 class="py-1 text-center border-bottom">Assessment Peer Review Submission</h4>
+        <h4 class="py-1 text-center border-bottom">Peer Review Assessment Instructions</h4>
 
-        <div class="form-group text-center">
-            <label class="h4" for="instruction">Assessment Instructions</label>
+        <div class="form-group ">
+            <label class="" for="instruction">Assessment Instructions</label>
             <textarea class="form-control mb-4" name="instruction" id="instruction" rows="7" readonly>{{$assesst_details->assessment_instruction}}</textarea>
 
             <div class="row">
@@ -53,40 +53,47 @@
 
             <form method="post" action="{{route('post-review',['cid' => $cid, 'assesst_id' => $assesst_id])}}" class="m-auto" style="width:auto" enctype="multipart/form-data">
                 @csrf
-{{--I create a HIDDEN INPUT TO PASS THE NUMBER OF REVIEWS REQUIRED TO THE FORM SO IT CAN LOOP THE CREATE ELOQUENT --}}
+                {{--I create a HIDDEN INPUT TO PASS THE NUMBER OF REVIEWS REQUIRED TO THE FORM SO IT CAN LOOP THE CREATE ELOQUENT --}}
                 <input class="invisible" name="number_of_reviews_required" value="{{$assesst_details->number_reviews_required}}">
                 <div class="form-group">
                     <h4 class="text-center" for="instruction">Submit A peer review</h4>
                     <h6 class="text-center text-warning">You have submitted {{$my_total_reviews}} Reviews out of {{$assesst_details->number_reviews_required}}</h6>
 
-{{--if my total reviews is less than number_reviews_required--}}
+                    {{--if my total reviews is less than number_reviews_required--}}
                     @php
-                        $total_reviews_different_name_so_submit_button_wont_disable = $my_total_reviews; //so incrementor value from db
+                        //                    $my_total_reviews is 0 because i havent made any review hence i am not filling the review forms
+                                                $total_reviews_different_name_so_submit_button_wont_disable = $my_total_reviews; //so incrementor value from db to show input fields x times
                     @endphp
                     @while($total_reviews_different_name_so_submit_button_wont_disable != $assesst_details->number_reviews_required)
 
-{{--I LOOP THIS FORM ACCORDING TO THE NUMBER OF REVIEWS REQUIRED FOR THIS ASSESSMENT --}}
-{{--I ALSO SHOULD LOOP IN THE CREATE ELOQUENT --}}
+                        {{--I LOOP THIS FORM ACCORDING TO THE NUMBER OF REVIEWS REQUIRED FOR THIS ASSESSMENT --}}
+                        {{--I ALSO SHOULD LOOP IN THE CREATE ELOQUENT --}}
                         <div class="d-flex justify-content-center">
+                            {{--                            @dd($total_reviews_different_name_so_submit_button_wont_disable)--}}
+                            {{--Thinking of using 0 then increment to match the number of reviews required. this way we can validate if a student was selected for this review field x--}}
                             <select name="reviewee_user_number[]" class="custom-select custom-select-sm form-control w-50 my-4 text-center">
-                                <option selected>Select Student Reviewee</option>
 
                                 @foreach($students_and_course_inthiscourse as $student)
-                                    <option value="{{ $student->user->user_number }}">{{ $student->user->fullname }} - sNumber: {{ $student->user->user_number }}</span></option>
+                                    <option value="{{$student->user->user_number }}">{{ $student->user->fullname }} - sNumber: {{ $student->user->user_number }}</span></option>
                                 @endforeach
                             </select>
                         </div>
+                        <x-input-error :messages="$errors->get('reviewee_user_number[]')"/>
 
-                    <div class="container w-75">
-                        <label class="h4" for="reviewtext">Review ATLEAST5WORDS</label>
-                        <textarea class="form-control mb-4" name="review_text[]" id="reviewtext" rows="7" placeholder="Your review here"></textarea>
-                    </div>
+                        <div class="container w-75">
+                            <label class="h4" for="reviewtext">Review Text</label>
+                            {{-- will look like review_text0 --}}
+                            {{-- will look like review_text1 --}}
+                            <textarea class="form-control mb-4" name="review_text{{$total_reviews_different_name_so_submit_button_wont_disable}}" rows="7" placeholder="Your review here"></textarea>
+                            <x-input-error :messages="$errors->get('review_text'.$total_reviews_different_name_so_submit_button_wont_disable)"/>
+{{--                                                    @dd("review_text{$total_reviews_different_name_so_submit_button_wont_disable}[]");--}}
+                        </div>
                         @php
                             $total_reviews_different_name_so_submit_button_wont_disable ++;
                         @endphp
                 </div>
-{{--END OF LOOP THIS FORM ACCORDING TO THE NUMBER OF REVIEWS REQUIRED FOR THIS ASSESSMENT--}}
-                    @endwhile
+                {{--END OF LOOP THIS FORM ACCORDING TO THE NUMBER OF REVIEWS REQUIRED FOR THIS ASSESSMENT--}}
+                @endwhile
 
                 <div class="d-flex justify-content-center">
                     @if($my_total_reviews>=$assesst_details->number_reviews_required)
@@ -99,88 +106,87 @@
         </div>
     </div>
 
-{{--    CREATING A TWO COLUMN FOR REVIEWS GIVEN VS REVIEWS RECEIVED--}}
-<div class="container">
-    <div class="row row-cols-md-2 g-4">
-        <div class="col px-4">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="text-center">Reviews <span class="text-warning">Received</span> for this assessment</h4>
-                </div>
+    {{--    CREATING A TWO COLUMN FOR REVIEWS GIVEN VS REVIEWS RECEIVED--}}
+    <div class="container">
+        <div class="row row-cols-md-2 g-4">
+            <div class="col px-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-center">Reviews <span class="text-warning">Received</span> for this assessment</h4>
+                    </div>
 
-{{-- REVIEWS YOU HAVE BEEN GIVEN/RECEIVED   --}}
-                <div class="b-divider"></div>
+                    {{-- REVIEWS YOU HAVE BEEN GIVEN/RECEIVED   --}}
+                    <div class="b-divider"></div>
 
-                <div class="container my-4 form-group">
+                    <form class="container my-4 form-group">
 
-                    @foreach($my_received_reviews as $individual_review)
+                        @foreach($my_received_reviews as $individual_review)
 
-                        <div class=" text-center d-flex justify-content-center">
-                            <a class="w-50 list-group list-group-item list-group-item-action list-group-item-success text-light" style="background-color: #198754">
-                                Reviewer: {{$individual_review->reviewer->fullname}}</a>
-                        </div>
+                            <div class=" text-center d-flex justify-content-center">
+                                <a class="w-50 list-group list-group-item list-group-item-action list-group-item-success text-light" style="background-color: #198754">
+                                    Reviewer: {{$individual_review->reviewer->fullname}}</a>
+                            </div>
 
-                        <textarea class="form-control mb-4 border-success" name="review_text" id="reviewtext" rows="7" placeholder="Your review here" readonly>
+                            <textarea class="form-control mb-4 border-success" name="review_text" id="reviewtext" rows="7" placeholder="Your review here" readonly>
                 {{$individual_review->review_submitted}}
             </textarea>
-                        {{--RATE THIS REVIEWER SLIDER--}}
-                        <p class="h5 text-center text-warning">Rate this Review in Terms of its Usefulness</p>
+                            {{--RATE THIS REVIEWER SLIDER--}}
+                            <p class="h5 text-center text-warning">Rate this Review in Terms of its Usefulness</p>
+                            {{--SUBMIT RATING RATE THIS REVIEWER SLIDER--}}
+                            <form method="post" action="{{route('post-edit-reviewer-rating',['cid' => $cid, 'assesst_id' => $assesst_id])}}" class="m-auto" enctype="multipart/form-data">
 
-                        {{--SUBMIT RATING RATE THIS REVIEWER SLIDER--}}
-                        <form method="post" action="{{route('post-edit-reviewer-rating',['cid' => $cid, 'assesst_id' => $assesst_id])}}" class="m-auto" enctype="multipart/form-data">
-
-                            @csrf
-                            {{--Reviewee Rates Here--}}
-                            {{--                @dd($individual_review->reviewee_rated)--}}
-                            <div class="container d-flex justify-content-center">
-                                <input type="range" name="reviewee_is_rating_as" class="form-range mt-4 w-50" value="{{$individual_review->reviewee_rated}}"
-                                       min="1" max="5" id="range">
-                            </div>
-                            {{--HIDDEN INPUT TO PASS REVIEWER_ID TO FORM FOR SUBMISSION TO DB --}}
-                            <input class="invisible" value="{{$individual_review->reviewer->user_number}}" name="reviewer_id">
-                            {{--LOCATION HAS TO MATCH REVIEWER_ID REVIEWEE_ID ASSESST_ID AND COURSE_ID --}}
-                            <div class="container d-flex justify-content-center">
-                                <button class="btn btn-success bi bi-upload mb-4" type="submit"> Submit Rating</button>
-                            </div>
-                        </form>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-{{--SECOND COLUMN FOR REVIEWS GIVEN--}}
-        <div class="col px-4">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="text-center">Reviews You <span class="text-warning">Posted</span> for this Assessment</h4>
+                                @csrf
+                                {{--Reviewee Rates Here--}}
+                                {{--                @dd($individual_review->reviewee_rated)--}}
+                                <div class="container d-flex justify-content-center">
+                                    <input type="range" name="reviewee_is_rating_as" class="form-range mt-4 w-50" value="{{$individual_review->reviewee_rated}}"
+                                           min="1" max="5" id="range">
+                                </div>
+                                {{--HIDDEN INPUT TO PASS REVIEWER_ID TO FORM FOR SUBMISSION TO DB --}}
+                                <input class="invisible" value="{{$individual_review->reviewer->user_number}}" name="reviewer_id">
+                                {{--LOCATION HAS TO MATCH REVIEWER_ID REVIEWEE_ID ASSESST_ID AND COURSE_ID --}}
+                                <div class="container d-flex justify-content-center">
+                                    <button class="btn btn-primary bi bi-upload mb-4" type="submit"> Submit Rating</button>
+                                </div>
+                            </form>
+                        @endforeach
+                    </div>
                 </div>
 
-                {{-- REVIEWS YOU HAVE GIVEN   --}}
-                <div class="b-divider"></div>
+            {{--SECOND COLUMN FOR REVIEWS GIVEN--}}
+            <div class="col px-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-center">Reviews You <span class="text-warning">Posted</span> for this Assessment</h4>
+                    </div>
 
-                <div class="container my-4 form-group">
+                    {{-- REVIEWS YOU HAVE GIVEN   --}}
+                    <div class="b-divider"></div>
 
-                    @foreach($my_given_reviews as $individual_review)
+                    <div class="container my-4 form-group">
 
-                        <div class=" text-center d-flex justify-content-center">
-                            <a class="w-50 list-group list-group-item list-group-item-action list-group-item-success text-light" style="background-color: #198754">
-                                Reviewer (You): {{$individual_review->reviewer->fullname}}</a>
-{{--Reviewee in $individual_review->reviewee->fullname is from the reviewee method in the controller derived from the medthod in the model that declares the relationship--}}
-                            <a class="w-50 list-group list-group-item list-group-item-action list-group-item-success text-light" style="background-color: #dc3545">
-                                Reviewee : {{$individual_review->reviewee->fullname}}</a>
-                        </div>
+                        @foreach($my_given_reviews as $individual_review)
 
-                        <textarea class="form-control mb-4 border-success" name="review_text" id="reviewtext" rows="7" placeholder="Your review here" readonly>
+                            <div class=" text-center d-flex justify-content-center">
+                                <a class="w-50 list-group list-group-item list-group-item-action list-group-item-success text-light" style="background-color: #198754">
+                                    Reviewer (You): {{$individual_review->reviewer->fullname}}</a>
+                                {{--Reviewee in $individual_review->reviewee->fullname is from the reviewee method in the controller derived from the medthod in the model that declares the relationship--}}
+                                <a class="w-50 list-group list-group-item list-group-item-action list-group-item-success text-light" style="background-color: #dc3545">
+                                    Reviewee : {{$individual_review->reviewee->fullname}}</a>
+                            </div>
+
+                            <textarea class="form-control mb-4 border-success" name="review_text" id="reviewtext" rows="7" placeholder="Your review here" readonly>
                 {{$individual_review->review_submitted}}
             </textarea>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <style>
-{{--        SOME STYLING FOR THE DROPDOWN COLORS --}}
+        {{--        SOME STYLING FOR THE DROPDOWN COLORS --}}
         .custom-select {
             background-color: #135626; /* Default background */
             color: white; /* Default text color */

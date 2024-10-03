@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
     use App\Models\Assessment;
 
+    use App\Models\Course;
     use App\Models\CourseData;
     use App\Models\Review;
     use Illuminate\Http\Request;
@@ -76,7 +77,7 @@
 
 
             // Return the data to the view
-            return view('list-assessments')
+            return view('list-to-mark-assessments')
                 ->with('assesst_details', $assessmentdetails[0])
                 ->with('cid', $cid)
                 ->with('assesst_id', $assesst_id)
@@ -89,17 +90,28 @@
 
         public function update( int $cid, $assesst_id, Request $request) //updates an assessment from the database
         {
-            $Assessment_instruction = $request->input('instruction');
-            $due_dates = $request->input('due_date');
-            $reviews_requireds = $request->input('reviews_required');
-            $max_scores = $request->input('max_score');
-            $pr_assessment_type = $request->input('pr_assessment_type');
+            $validate=  $request->validate([
+                'assessment_title' =>  'required|max:20',
+                'assessment_instruction' =>  'required',
+                'number_of_reviews' =>  'required|integer|min:1',
+                'maximum_score' =>  'required|integer|min:1|max:100',
+                'due_date_and_time' =>  'required',
+                'assessment_type' =>  'required',
+            ]);
+
+            $Assessment_title = $request->input('assessment_title');
+            $Assessment_instruction = $request->input('assessment_instruction');
+            $due_dates = $request->input('due_date_and_time');
+            $reviews_requireds = $request->input('number_of_reviews');
+            $max_scores = $request->input('maximum_score');
+            $pr_assessment_type = $request->input('assessment_type');
 
             $current_record = Assessment::where('id', $assesst_id)//to update, first retrieve score
             ->where('course_id', $cid)//figured i dont need this here
             ->first();
 //        dd($sid);
             $current_record->update([
+                'assessment_name' => $Assessment_title,
                 'assessment_instruction' => $Assessment_instruction,
                 'due_date' => $due_dates,
                 'reviews_required' => $reviews_requireds,
@@ -164,24 +176,35 @@
                 ->with('students_and_course_inthiscourse',$students_andcourse_inthiscourse);//need to run a loop for each array and another loop for each user
         }
 
-        public function edit(int $cid, $assesst_id)
-        {
-
-        }
 
         public function create(int $cid)//return the view of creating a new assessment
         {
-            return view('create-new-assessment')->with('cid', $cid);
+            $thenameofthiscourse = CourseData::with('course')
+                ->where('course_id',$cid)->first();
+
+            return view('create-new-assessment')
+                ->with('cid', $cid)
+                ->with('nameofthiscourse', $thenameofthiscourse['course']->course_name);
         }
 
         public function post($cid , Request $request)//method posts a new assessment from teacher (create-new-assessment)
         {
+
+            $validate=  $request->validate([
+                'assessment_title' =>  'required|max:20',
+                'assessment_instruction' =>  'required',
+                'number_of_reviews' =>  'required|integer|min:1',
+                'maximum_score' =>  'required|integer|min:1|max:100',
+                'due_date_and_time' =>  'required',
+                'assessment_type' =>  'required',
+            ]);
+
             $Assessment_name = $request->input('assessment_title');
             $Assessment_instruction = $request->input('assessment_instruction');
-            $Required_reviews_number = $request->input('reviews_number');
-            $max_score = $request->input('max_score');
-            $due_dates_and_time = $request->input('due_date_time');
-            $pr_type = $request->input('pr_type_select');
+            $Required_reviews_number = $request->input('number_of_reviews');
+            $max_score = $request->input('maximum_score');
+            $due_dates_and_time = $request->input('due_date_and_time');
+            $pr_type = $request->input('assessment_type');
 
 
             $create_assessment = Assessment::create(array( //yes i created its fillable in model

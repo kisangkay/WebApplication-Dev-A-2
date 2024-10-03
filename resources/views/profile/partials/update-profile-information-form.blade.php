@@ -1,4 +1,6 @@
 <section>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+{{--    The model css and js  uses this --}}
     <header>
         <h2 class="text-lg font-medium text-white">Profile Information</h2>
 

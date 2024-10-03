@@ -12,9 +12,12 @@
     {
         public function enroll( Request $request)//retrieve the student id from url to update in users model
         {
+            $validate=  $request->validate([
+                'student_number' =>   'required|integer|min:1',
+        ]);
 
             $course_id = $request->input('course_id');//INPUT VALUDATION
-            $student_id_to_add = $request->input('student_id_to_add');
+            $student_id_to_add = $request->input('student_number');
 
 //TO HANDLE EVENT WHERE USER ENTERS STUDENT WHO WHERE ALREADY A COURSE MEMBER, I CHECK IF $student_id_to_add exists in COL WITH $course_id
             $select_if_student_to_enroll = CourseData::where('user_number', $student_id_to_add)->first();

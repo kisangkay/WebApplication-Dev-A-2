@@ -5,6 +5,8 @@
     use App\Models\AssessmentScore;
     use App\Models\Review;
     use App\Models\User;
+    use App\Rules\DropdownChecker;
+    use App\Rules\MinWords;
     use Illuminate\Http\Request;
 
     class ReviewsController extends Controller
@@ -54,17 +56,31 @@
 
         public function index_student_create_review(int $cid, $assesst_id, Request $request)//STUDENT SUBMITTING A REVIEW ENTRY
         {
-//CHECK IF THERE IS ALREADY A REVIEW FOR THIS STUDENT MADE BY LOGGED IN USER
+//VALUES TO CHECK IF THERE IS ALREADY A REVIEW FOR THIS STUDENT MADE BY THE LOGGED IN USER
             $reviewer_id_logged_in = auth()->user()->user_number; //get reviewer snumber
             $reviewee_user_number = $request->input('reviewee_user_number'); //get reviewee student number
             $number_of_reviews_required = $request->input('number_of_reviews_required'); //NUMBER OF REVIEWS REQUIRED
 
-//I FIGURE I NEED TO LOOP THE HAVEIREVIEWED CHECKER THE NUMBER OF TIMES OF number_reviews_required
+
+
+            $array = [];
+
             for ($i = 0; $i < $number_of_reviews_required; $i++) {
+//                dd($request->input('review_text'.$i));
+                // Collect the validation rules for each review_text field
+                $array['review_text' . $i] = [new MinWords(5)];
+            }
+            $request->validate($array);
 
-                $reviewee_user_number = $request->reviewee_user_number[$i];
 
-//RUBRIC DIDNT SPECIFY IF TO PREVENT USER FROM REVIEWING THEMSELVES
+            //i was only getting the first option validated hence opted to using an array to validate each at once after gathering the form field values
+//            $request->validate($review_text_array_fields);
+
+//I FIGURE I NEED TO LOOP THE HAVEIREVIEWED CHECKER THE NUMBER OF TIMES OF number_reviews_required
+                for ($i = 0; $i < $number_of_reviews_required; $i++) {//checking if review done by logged in user for each student
+
+                    $reviewee_user_number = $request->reviewee_user_number[$i];
+//RUBRIC DIDNT SPECIFY IF I TO PREVENT USER FROM REVIEWING THEMSELVES
 //                if ($reviewee_user_number == $reviewer_id_logged_in){
 //                    return back()->with('feedback_error', 'Sorry you cannot review Yourself');
 //                }
@@ -80,16 +96,18 @@
                     return back()->with('feedback_error', 'Review NOT Submitted, you already made a review for this Student');
                 }
             }
+//                dd($request->review_text);
 
 //I LOOP THE CREATE ELOQUENT THE NUMBER OF TIMES OF THE FORM SECTION WAS DISPLAYES
             //if no existing review yet for this course, assessment, reviewer and reviewee id combo
 
             for ($i = 0; $i < $number_of_reviews_required; $i++) {
-                $post_Review = Review::create(array(
+                Review::create(array(
 
                     'reviewer_user_number'=>$reviewer_id_logged_in, //reviewer is the same for all reviews
                     'reviewee_user_number'=>$request->reviewee_user_number[$i],//since the name attributes in html are arrays
-                    'review_submitted'=>$request->review_text[$i],
+//                    'review_submitted'=>$request->review_text[$i],
+                    'review_submitted'=>$request->input('review_text'.$i),
                     'assessment_id'=>$assesst_id, //assesst id is the same for all reviews
                     'course_id'=>$cid //courseid is the same for all reviews
                 ));

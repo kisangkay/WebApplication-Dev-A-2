@@ -7,8 +7,12 @@
 
     class AssessmentScoreController extends Controller
     {
-        public function post_score(int $cid, $assesst_id,  $sid, Request $request)//all values passed in the url in that order we need $sid
+        public function post_score(int $cid, $assesst_id,  $sid, Request $request)//post score
         {
+            $validate=  $request->validate([
+                'score' =>  'required|integer|min:1|max:100',
+            ]);
+
             $scoreValue = $request->input('score');
 //        dd($sid);
             $score = AssessmentScore::create(array('assessment_id'=>$assesst_id, 'score'=> $scoreValue, 'course_id'=>$cid, 'user_number'=>$sid ));
@@ -16,8 +20,11 @@
 
         }
 
-        public function update_score(int $cid, $assesst_id,  $sid, Request $request)//all values passed in the url in that order we need $sid
+        public function update_score(int $cid, $assesst_id,  $sid, Request $request)//update score all values passed in the url in that order we need $sid
         {
+            $validate=  $request->validate([
+                'score' =>  'required|integer|min:1|max:100',
+            ]);
             $scoreValue = $request->input('score');
 
             $assessment_score = AssessmentScore::where('user_number', $sid)//to update, first retrieve score

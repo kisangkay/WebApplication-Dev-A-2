@@ -38,9 +38,10 @@
             Route::get('/courses/{id}/teacher/add_registered_student', [CourseController::class, 'add_registered_student'])->name('add_registered_student');
             Route::get('/courses/{id}/teacher', [CourseController::class, 'teacher_show'])->name('courses_teacher');
 
-            Route::get('/courses/{cid}/teacher/create-new-assessment', [AssessmentDetails::class, 'create'])->name('create-new-assessment');
             Route::post('/courses/{cid}/teacher/assessment-details-page/{assesst_id}/update-assessment-details', [AssessmentDetails::class, 'update'])->name('update-assessment-details');
             Route::get('/courses/{cid}/teacher/assessment-details-page/{assesst_id}/mark-assessments', [AssessmentDetails::class, 'mark_assessments'])->name('mark-assessments');
+
+            Route::get('/courses/{cid}/teacher/create-new-assessment', [AssessmentDetails::class, 'create'])->name('create-new-assessment');
             Route::post('/courses/{cid}/teacher/post-new-assessment', [AssessmentDetails::class, 'post'])->name('post-new-assessment');
 
             Route::post('/enroll-student', [Enroll::class, 'enroll'])->name('enroll-student');
