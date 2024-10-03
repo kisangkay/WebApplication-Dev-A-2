@@ -1,9 +1,9 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.menu-role-conditioned')
+@section('content')
+
+<div class="container w-50 mt-5">
+
+        <h2 class="text-center h2">Manage your Profile</h2>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -26,4 +26,7 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+    </div>
+
+@endsection
+

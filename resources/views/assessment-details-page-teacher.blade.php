@@ -64,7 +64,7 @@
         </form>
 
         <div class="container d-flex justify-content-center">
-            <a href="{{route('list-assessments',['cid' =>$cid, 'assesst_id' => $assesst_id])}}"
+            <a href="{{route('mark-assessments',['cid' =>$cid, 'assesst_id' => $assesst_id])}}"
                class=" btn btn-primary w-50 mb-4 bi bi-pencil-square" type="submit"> Mark Enrolled Students</a>
         </div>
 

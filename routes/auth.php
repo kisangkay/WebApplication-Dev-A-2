@@ -17,7 +17,8 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])//the Validation for inputs of login are
+        //in its controller method input variables, so the controller takes it after its validated
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);

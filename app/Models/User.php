@@ -13,9 +13,7 @@ class User extends Authenticatable
     protected $primaryKey = 'user_number'; // user_number is now our primary key not id
     protected $keyType = 'int';
     public $incrementing = false;//user number is primary key  but not AI
-    protected $primaryKey = 'user_number'; // user_number is now our primary key not id
-    protected $keyType = 'int';
-    public $incrementing = false;//user number is primary key  but not AI
+
     public function courseData() //function to link course model to course data model,... to retrieve the courses a user is enrolled
     {
 

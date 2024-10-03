@@ -1,121 +1,259 @@
 @extends('layouts.root')
-<div class="container form-signin mt-5">
-@extends('layouts.root')
+@section('content')
 <div class="container form-signin mt-5">
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
         <div>
-            <h1 class="bi bi-people text-center mt-5"> Welcome to Peer Reviews Manager</h1>
+            <h1 class="h1 bi bi-people text-center mt-5"> Welcome to Peer Reviews Manager</h1>
         </div>
 
-        <h5 class="text-center">Register</h5>
-        <div>
-            <h1 class="bi bi-people text-center mt-5"> Welcome to Peer Reviews Manager</h1>
-        </div>
-
-        <h5 class="text-center">Register</h5>
+        <h5 class="text-center">Student Registration</h5>
 
         <!-- Student number -->
         <div>
             <label for="user_number">Student Number</label>
-            <input class="form-control" id="user_number" type="number" name="user_number" :value="old('user_number')" autofocus autocomplete="user_number"/>
+            <input class="form-control" id="user_number" type="text" name="user_number" value="{{old('user_number')}}" autofocus autocomplete="user_number"/>
         </div>
-{{--  Error message      --}}
+        {{--  Error message      --}}
         <div>
-            @if($errors->get('user_number'))
-                <div class="text-danger mt-2">
-                    @foreach ($errors->get('user_number') as $message)
-                        {{ $message }}<br>
-                    @endforeach
-                        @foreach ($errors->get('fullname') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                        @foreach ($errors->get('email') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                        @foreach ($errors->get('password') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                        @foreach ($errors->get('password_confirmation') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                </div>
-            @endif
-            <label for="user_number">Student Number</label>
-            <input class="form-control" id="user_number" type="number" name="user_number" :value="old('user_number')" autofocus autocomplete="user_number"/>
-        </div>
-{{--  Error message      --}}
-        <div>
-            @if($errors->get('user_number'))
-                <div class="text-danger mt-2">
-                    @foreach ($errors->get('user_number') as $message)
-                        {{ $message }}<br>
-                    @endforeach
-                        @foreach ($errors->get('fullname') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                        @foreach ($errors->get('email') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                        @foreach ($errors->get('password') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                        @foreach ($errors->get('password_confirmation') as $message)
-                            {{ $message }}<br>
-                        @endforeach
-                </div>
-            @endif
+            <x-input-error :messages="$errors->get('user_number')" class="mt-2 text-red-500" />
         </div>
 
         <!-- Fullname -->
         <div>
             <label for="fullname">Fullname</label>
             <input id="fullname" class="form-control" type="text" name="fullname" :value="old('fullname')" autofocus autocomplete="fullname"/>
-            <label for="fullname">Fullname</label>
-            <input id="fullname" class="form-control" type="text" name="fullname" :value="old('fullname')" autofocus autocomplete="fullname"/>
         </div>
+        <li class="mt-2 text-danger list-unstyled">{{$errors->first('fullname')}}</li>
 
         <!-- Email Address -->
         <div class="mt-4">
             <label for="email">Email</label>
             <input id="email" class="form-control" type="email" name="email" :value="old('email')" autocomplete="username"/>
-            <label for="email">Email</label>
-            <input id="email" class="form-control" type="email" name="email" :value="old('email')" autocomplete="username"/>
         </div>
+        <li class="mt-2 text-danger list-unstyled">{{$errors->first('email')}}</li>
 
         <!-- Password -->
         <div class="mt-4">
             <label for="password">Password</label>
             <input id="password" class="form-control"
-            <label for="password">Password</label>
-            <input id="password" class="form-control"
-                            type="password"
-                            name="password" autocomplete="new-password"/>
+                   type="password"
+                   name="password" autocomplete="new-password"/>
         </div>
+        <li class="mt-2 text-danger list-unstyled">{{$errors->first('password')}}</li>
 
         <!-- Confirm Password -->
         <div class="mt-4">
             <label for="password_confirmation" style="background-color:#1d34583b">Confirm Password</label>
-            <label for="password_confirmation" style="background-color:#1d34583b">Confirm Password</label>
 
             <input id="password_confirmation" class="form-control"
-            <input id="password_confirmation" class="form-control"
-                            type="password"
-                            name="password_confirmation" autocomplete="new-password"/>
+                   type="password"
+                   name="password_confirmation" autocomplete="new-password"/>
+            <li class="mt-2 text-danger list-unstyled">{{$errors->first('password_confirmation')}}</li>
         </div>
 
         <div class="d-flex justify-content-center mt-3">
             <button type="submit" class="btn btn-primary">Register</button><br>
-        <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-primary">Register</button><br>
         </div>
 
-        <div class="d-flex justify-content-center  mt-4">
-            <a class="text-sm text-decoration-none" href="{{ route('login') }}">Already registered?</a>
         <div class="d-flex justify-content-center  mt-4">
             <a class="text-sm text-decoration-none" href="{{ route('login') }}">Already registered?</a>
         </div>
     </form>
 </div>
-</div>
+<style>
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: var(--bs-body-color);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: var(--bs-body-bg);
+        background-clip: padding-box;
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .form-control {
+            transition: none;
+        }
+    }
+    .form-control[type=file] {
+        overflow: hidden;
+    }
+    .form-control[type=file]:not(:disabled):not([readonly]) {
+        cursor: pointer;
+    }
+    .form-control:focus {
+        color: var(--bs-body-color);
+        background-color: var(--bs-body-bg);
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    .form-control::-webkit-date-and-time-value {
+        min-width: 85px;
+        height: 1.5em;
+        margin: 0;
+    }
+    .form-control::-webkit-datetime-edit {
+        display: block;
+        padding: 0;
+    }
+    .form-control::-moz-placeholder {
+        color: var(--bs-secondary-color);
+        opacity: 1;
+    }
+    .form-control::placeholder {
+        color: var(--bs-secondary-color);
+        opacity: 1;
+    }
+    .form-control:disabled {
+        background-color: var(--bs-secondary-bg);
+        opacity: 1;
+    }
+    .form-control::-webkit-file-upload-button {
+        padding: 0.375rem 0.75rem;
+        margin: -0.375rem -0.75rem;
+        -webkit-margin-end: 0.75rem;
+        margin-inline-end: 0.75rem;
+        color: var(--bs-body-color);
+        background-color: var(--bs-tertiary-bg);
+        pointer-events: none;
+        border-color: inherit;
+        border-style: solid;
+        border-width: 0;
+        border-inline-end-width: var(--bs-border-width);
+        border-radius: 0;
+        -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    .form-control::file-selector-button {
+        padding: 0.375rem 0.75rem;
+        margin: -0.375rem -0.75rem;
+        -webkit-margin-end: 0.75rem;
+        margin-inline-end: 0.75rem;
+        color: var(--bs-body-color);
+        background-color: var(--bs-tertiary-bg);
+        pointer-events: none;
+        border-color: inherit;
+        border-style: solid;
+        border-width: 0;
+        border-inline-end-width: var(--bs-border-width);
+        border-radius: 0;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .form-control::-webkit-file-upload-button {
+            -webkit-transition: none;
+            transition: none;
+        }
+        .form-control::file-selector-button {
+            transition: none;
+        }
+    }
+    .form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button {
+        background-color: var(--bs-secondary-bg);
+    }
+    .form-control:hover:not(:disabled):not([readonly])::file-selector-button {
+        background-color: var(--bs-secondary-bg);
+    }
+
+    .form-control-plaintext {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0;
+        margin-bottom: 0;
+        line-height: 1.5;
+        color: var(--bs-body-color);
+        background-color: transparent;
+        border: solid transparent;
+        border-width: var(--bs-border-width) 0;
+    }
+    .form-control-plaintext:focus {
+        outline: 0;
+    }
+    .form-control-plaintext.form-control-sm, .form-control-plaintext.form-control-lg {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .form-control-sm {
+        min-height: calc(1.5em + 0.5rem + calc(var(--bs-border-width) * 2));
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        border-radius: var(--bs-border-radius-sm);
+    }
+    .form-control-sm::-webkit-file-upload-button {
+        padding: 0.25rem 0.5rem;
+        margin: -0.25rem -0.5rem;
+        -webkit-margin-end: 0.5rem;
+        margin-inline-end: 0.5rem;
+    }
+    .form-control-sm::file-selector-button {
+        padding: 0.25rem 0.5rem;
+        margin: -0.25rem -0.5rem;
+        -webkit-margin-end: 0.5rem;
+        margin-inline-end: 0.5rem;
+    }
+
+    .form-control-lg {
+        min-height: calc(1.5em + 1rem + calc(var(--bs-border-width) * 2));
+        padding: 0.5rem 1rem;
+        font-size: 1.25rem;
+        border-radius: var(--bs-border-radius-lg);
+    }
+    .form-control-lg::-webkit-file-upload-button {
+        padding: 0.5rem 1rem;
+        margin: -0.5rem -1rem;
+        -webkit-margin-end: 1rem;
+        margin-inline-end: 1rem;
+    }
+    .form-control-lg::file-selector-button {
+        padding: 0.5rem 1rem;
+        margin: -0.5rem -1rem;
+        -webkit-margin-end: 1rem;
+        margin-inline-end: 1rem;
+    }
+
+    textarea.form-control {
+        min-height: calc(1.5em + 0.75rem + calc(var(--bs-border-width) * 2));
+    }
+    textarea.form-control-sm {
+        min-height: calc(1.5em + 0.5rem + calc(var(--bs-border-width) * 2));
+    }
+    textarea.form-control-lg {
+        min-height: calc(1.5em + 1rem + calc(var(--bs-border-width) * 2));
+    }
+
+    .form-control-color {
+        width: 3rem;
+        height: calc(1.5em + 0.75rem + calc(var(--bs-border-width) * 2));
+        padding: 0.375rem;
+    }
+    .form-control-color:not(:disabled):not([readonly]) {
+        cursor: pointer;
+    }
+    .form-control-color::-moz-color-swatch {
+        border: 0 !important;
+        border-radius: var(--bs-border-radius);
+    }
+    .form-control-color::-webkit-color-swatch {
+        border: 0 !important;
+        border-radius: var(--bs-border-radius);
+    }
+    .form-control-color.form-control-sm {
+        height: calc(1.5em + 0.5rem + calc(var(--bs-border-width) * 2));
+    }
+    .form-control-color.form-control-lg {
+        height: calc(1.5em + 1rem + calc(var(--bs-border-width) * 2));
+    }
+</style>
+@endsection

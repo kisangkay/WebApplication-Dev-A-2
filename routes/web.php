@@ -11,7 +11,10 @@
     use App\Http\Middleware\check_user_role;
 
 
-//if user is not logged in, they will be redirected to page login
+    //i have 2 middlewares applying to groups of controllers, one to check if user is logged in
+    //The only page without this restriction is TOP REVIWERS PAGE
+    //another is a role manager restricting students from teachers page.
+
     Route::middleware('auth')->group(function () {//this group of functions require user to be logged in first
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -37,7 +40,7 @@
 
             Route::get('/courses/{cid}/teacher/create-new-assessment', [AssessmentDetails::class, 'create'])->name('create-new-assessment');
             Route::post('/courses/{cid}/teacher/assessment-details-page/{assesst_id}/update-assessment-details', [AssessmentDetails::class, 'update'])->name('update-assessment-details');
-            Route::get('/courses/{cid}/teacher/assessment-details-page/{assesst_id}/list-assessments', [AssessmentDetails::class, 'list_assessments'])->name('list-assessments');
+            Route::get('/courses/{cid}/teacher/assessment-details-page/{assesst_id}/mark-assessments', [AssessmentDetails::class, 'mark_assessments'])->name('mark-assessments');
             Route::post('/courses/{cid}/teacher/post-new-assessment', [AssessmentDetails::class, 'post'])->name('post-new-assessment');
 
             Route::post('/enroll-student', [Enroll::class, 'enroll'])->name('enroll-student');
@@ -48,6 +51,5 @@
 
     Route::get('/top-reviewers', [TopReviewers::class, 'index'])->name('top-reviewers');//Accessible by anyuser
 
-    require __DIR__.'/auth.php';
     require __DIR__.'/auth.php';
 

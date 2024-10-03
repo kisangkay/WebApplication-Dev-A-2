@@ -1,7 +1,11 @@
-<x-guest-layout>
+@extends('layouts.root')
+<div class="container form-signin mt-5">
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 
+        <div>
+            <h1 class="bi bi-people text-center mt-5"> Welcome to Peer Reviews Manager</h1>
+        </div>
         <!-- Password Reset Token -->
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
@@ -36,4 +40,4 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</div>

@@ -7,6 +7,11 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-icons.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+{{--    css and js for the delete account button--}}
 </head>
 
 <body>
@@ -14,6 +19,7 @@
 @yield('menu-student')
 @yield('menu-role-conditioned')
 @yield('content')
+
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

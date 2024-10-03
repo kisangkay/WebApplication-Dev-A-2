@@ -30,6 +30,7 @@
                 <div class="container w-50">
 
                     <div class="container d-flex justify-content-center w-50">
+{{--  Student number should not be null on input validation --}}
                         <input name="student_id_to_add" id="student_id_to_add" class="form-control text-light" style="background-color: rgba(41,173,224,0.3)" type="number" placeholder="Student Number">
                         <button class="btn btn-primary bi bi-check-circle w-50 ms-3"> Enroll</button>
                     </div>

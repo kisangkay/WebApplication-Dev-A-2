@@ -1,3 +1,4 @@
+{{--I use this for the delete account button--}}
 @props([
     'name',
     'show' => false,

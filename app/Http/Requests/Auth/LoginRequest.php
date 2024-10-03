@@ -24,11 +24,11 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
-    public function rules(): array
+    public function rules(): array //VALIDATION RULES OF LOGIN
     {
         return [
 //            'user_number' => ['required', 'string', 'user_number'],
-            'user_number' => ['required', 'string'],
+            'user_number' => ['required', 'integer'],//then you get error that entered string it must be an integer
             'password' => ['required', 'string'],
         ];
     }

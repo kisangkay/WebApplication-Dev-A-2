@@ -34,7 +34,9 @@
                         {{--fullname from the users model--}}
                         <td class="col text-center">{{ $top_reviewer->reviewer->fullname }}</td>
                         {{--from the review model--}}
-                        <td class="col text-center">{{ $top_reviewer->average_rating }}</td>
+{{--                        @dd((float)$top_reviewer->average_rating)--}}
+                        <td class="col text-center">{{ number_format((float)$top_reviewer->average_rating ,1)}}</td>
+{{--                        To round off to 1 dp--}}
                     </tr>
                 @endforeach
 
