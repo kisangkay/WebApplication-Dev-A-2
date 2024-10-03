@@ -1,71 +1,71 @@
-@extends('layouts.menu-teacher')
+@extends('layouts.menu-role-conditioned')
 @section('content')
-
-    {{-- Restricted page access to super admin on the route --}}
-
     <div class="b-divider"></div>
     <div class="container ">
         <h2 class="py-4 text-center border-bottom">All Registered Students</h2>
+{{--in controller we getting by first() so no need to loop over one record--}}
+        <h4 class="text-center border-bottom">Enroll A Registered Student to <span class="text-info">{{$this_course_name_for_header->course->course_name}}</span></h4>
         @if(session('feedback'))
-            <div class=" h6 alert alert-success border-bottom text-center text-light" role="alert">
+            <div class=" h6 alert alert-warning border-bottom text-center text-light" role="alert">
                 {{ session('feedback') }}
             </div>
         @endif
 
-        <div class="bd m-0 border-0">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{route('/')}}">Home</a></li>
+                <li class="breadcrumb-item active"><a href="{{url()->previous() }}">Courses Details Page</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Registered Student</li>
+            </ol>
+        </nav>
 
-            <table class="table table-striped">
+
+
+        <div class="bd m-0 border-0">
+            <h6 class="text-center text-warning ">Enter Student ID to Manually Enroll a Student to this course</h6>
+
+            <form method="post" action="{{route('enroll-student')}}">
+                @csrf
+
+                <div class="container w-50">
+
+                    <div class="container d-flex justify-content-center w-50">
+                        <input name="student_id_to_add" id="student_id_to_add" class="form-control text-light" style="background-color: rgba(41,173,224,0.3)" type="number" placeholder="Student Number">
+                        <button class="btn btn-primary bi bi-check-circle w-50 ms-3"> Enroll</button>
+                    </div>
+                    <input name="course_id" class="invisible" value="{{$cid}}">
+                </div>
+            </form>
+
+            <div class="d-flex justify-content-center">
+            <table class="table table-striped w-75">
                 <thead>
                 <tr>
-                    <th class="col-sm-1 text-center">Student Number</th>
+                    <th class=" text-center">Student Number</th>
                     <th class="text-center">Full Name</th>
                     <th class="text-center">Student Email</th>
-                    <th>De-Enroll</th>
-                    <th>Enroll</th>
                 </tr>
                 </thead>
                 <tbody>
 
-                @foreach($userwithenrollmentstatus as $allusrs)
+                @foreach($all_users as $allusrs)
                     <tr>
-                        <td class="col text-center">{{ $allusrs['user']->user_number }}</td>
-                        <td class="col text-center">{{ $allusrs['user']->fullname }}</td>
-                        <td class="col text-center">{{ $allusrs['user']->email }}</td>
+                        <td class="col text-center">{{ $allusrs->user_number }}</td>
+                        <td class="col text-center">{{ $allusrs->fullname }}</td>
+                        <td class="col text-center">{{ $allusrs->email }}</td>
 
-                        <td class="col col-sm-2">
-                            <form method="post"
-{{--                                  @dd($allusrs['courseid']);--}}
-{{--                                  @dd($allusrs['user']->id);--}}
-                                action="{{route('de-enroll-student', ['cid' => $allusrs['courseid'], 'sid' => $allusrs['user']->id])}}">
-                                @csrf
-                                @if($allusrs['enrolled'])
-                                    <button class="btn btn-danger bi bi-ban"> De-enroll</button>
-                                @else
-                                    <button class="btn btn-danger bi bi-ban" disabled> De-enroll</button>
-                                @endif
-                            </form>
-                        </td>
-                        <td>
-                            <form method="post"
-                                  action="{{route('enroll-student', ['cid' => $allusrs['courseid'], 'sid' => $allusrs['user']->id])}}">
-{{--                                  action="{{ route('super-admin-unban-user', ['userid' => $allusrs->user_id])}}">--}}
-                                @csrf
-                                @if(!$allusrs['enrolled'])
-                                    <button class="btn btn-success bi bi-check-circle"> Enroll</button>
-                                @else
-                                    <button class="btn btn-success bi bi-check-circle" disabled> Enroll</button>
-                                @endif
-                            </form>
-                        </td>
                     </tr>
                 @endforeach
 
 
                 </tbody>
             </table>
+            </div>
 
         </div>
 
-
+        <div class="container d-flex justify-content-center">
+            {{$all_users->links()}}
+        </div>
     </div>
 @endsection

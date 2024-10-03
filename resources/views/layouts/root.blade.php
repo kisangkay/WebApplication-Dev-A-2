@@ -12,6 +12,7 @@
 <body>
 @yield('menu-teacher')
 @yield('menu-student')
+@yield('menu-role-conditioned')
 @yield('content')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>

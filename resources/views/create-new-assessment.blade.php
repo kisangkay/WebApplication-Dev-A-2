@@ -1,17 +1,26 @@
-@extends('layouts.menu-teacher')
+@extends('layouts.menu-role-conditioned')
 @section('content')
     <div class="b-divider"></div>
 
     {{--VALIDATION ERROR MESSAGE    --}}
-    @if(session('validationerror'))
-        <div class=" h6 alert alert-info border-bottom text-center" role="alert">
-            {{ session('validationerror') }}
+    @if(session('feedback'))
+        <div class=" h6 alert alert-success border-bottom text-center text-light" role="alert">
+            {{ session('feedback') }}
         </div>
     @endif
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('/')}}">Home</a></li>
+            <li class="breadcrumb-item active"><a href="{{url()->previous() }}">Courses Details Page</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+        </ol>
+    </nav>
+
     <div class="container " id="custom-cards">
         <h2 class="py-4 text-center">Create a New Assessment</h2>
 
-        <form method="post" action="{{route('create-new-bicycle')}}" class="m-auto form-signin" style="width:auto"
+        <form method="post" action="{{route('post-new-assessment',['cid' => $cid])}}" class="m-auto form-signin" style="width:auto"
               enctype="multipart/form-data">
             @csrf
             <h5 class="text-center ">Assessment Title</h5>
@@ -34,25 +43,16 @@
 
             <div class="container mb-4">
                 <h5 class="text-center">Peer Review Type</h5>
-{{--                @foreach($all_manufacturers as $manufacturers)--}}
-                    <div class="form-check">
-                        <input class="form-check-input fs-4" type="radio" value="" name="type_student_select">
-                        <label class="form-check-label" for="flexRadioDefault1">Student-Select</label>
-                    </div>
+                <div class="form-check">
+                    <input class="form-check-input fs-4" type="radio" name="pr_type_select" id="type_student_selec" value="Student-Select" checked>
+                    <label class="form-check-label" for="type_student_selec">Student-Select</label>
+                </div>
 
-                        <div class="form-check">
-                        <input class="form-check-input fs-4" type="radio" value="" name="type_teacher_assign">
-                        <label class="form-check-label" for="flexRadioDefault1">Teacher-Assign</label>
-                        {{--                    just to show the manuf name above, but we pass the manuf id in the value--}}
-                    </div>
-{{--                @endforeach--}}
+                <div class="form-check">
+                    <input class="form-check-input fs-4" type="radio" name="pr_type_select" id="type_teacher_assig" value="Teacher-Assign">
+                    <label class="form-check-label" for="type_teacher_assig">Teacher-Assign</label>
+                </div>
             </div>
-
-{{--            <div class="container mb-4">--}}
-{{--                <label>Bike Image</label>--}}
-{{--                <input type="file" class="form-control" id="image" name="bike_image" accept="image/*" required>--}}
-{{--            </div>--}}
-
             <button class="btn btn-primary w-100 mb-4 bi bi-upload" type="submit"> Post New Assessment</button>
 
         </form>

@@ -10,15 +10,33 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    protected $primaryKey = 'user_number'; // user_number is now our primary key not id
+    protected $keyType = 'int';
+    public $incrementing = false;//user number is primary key  but not AI
     public function courseData() //function to link course model to course data model,... to retrieve the courses a user is enrolled
     {
-        return $this->hasMany(CourseData::class,'user_id'); //coursedata table is related to user in that
+
+        return $this->hasMany(CourseData::class, 'user_number', 'user_number');//coursedata table is related to user in that
         //one user can have many entries of coursedata
         //now I can easily retrieve all CourseData records for a user
 
-//        $user = User::find($userId);
-//        $coursesData = $user->courseData; // This will give you all related CourseData entries
     }
+//METHODS TO ASSOCIATE A USER TO REVIEWS COUNT AND ASSESSMENT SCORE
+    public function assessmentScores()
+    {
+        return $this->hasMany(AssessmentScore::class, 'user_number', 'user_number');
+    }
+    public function reviewsSubmitted()
+    {
+        return $this->hasMany(Review::class, 'reviewer_user_number', 'user_number');
+    }
+
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'reviewee_user_number', 'user_number');
+    }
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +48,7 @@ class User extends Authenticatable
         'fullname',
         'email',
         'password',
+        'user_role',
     ];
 
     /**

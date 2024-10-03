@@ -1,8 +1,34 @@
-@extends('layouts.menu-teacher')
+@extends('layouts.menu-role-conditioned')
 @section('content')
+{{--    MARKING PAGE--}}
     <div class="b-divider"></div>
     <div class="container" id="custom-cards">
-        <h4 class="py-4 text-center">Student Reviews for {{$reviewer_all_data->fullname}} and Score for {{$assessment_data->assessment_name}} Assessment</h4>
+        <div class="card">
+            <div class="card-header">
+{{--if couse posted--}}
+                @if(session('feedback'))
+                    <div class=" h6 alert alert-success border-bottom text-center text-light" role="alert">
+                        {{ session('feedback') }}
+                    </div>
+                @endif
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{route('/')}}">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="{{url()->previous() }}">Courses Details Page</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Assessment Details Page</li>
+                    </ol>
+                </nav>
+
+
+                <h4 class="text-center">Student Reviews and Score</h4>
+            </div>
+            <ul class="list-group">
+                <h6 class="list-group-item text-center">Student Name: <span class="text-warning fw-bold">{{$reviewer_all_data->fullname}}</span></h6>
+                <h6 class="list-group-item text-center">Assessment Name: <span class="text-warning fw-bold">{{$assessment_data->assessment_name}}</span></h6>
+                <h6 class="list-group-item text-center">Student Number: <span class="text-warning fw-bold">{{$reviewer_all_data->user_number}}</span></h6>
+            </ul>
+        </div>
         <div class="row row-cols-1 row-cols-md-2 g-4">
 
             <div class="col">
@@ -37,14 +63,27 @@
     </div>
 
     <div class="d-flex justify-content-center mt-4 card card mx-5 list-group-item list-group-item-info">
-        <form method="post" action="{{route('create-new-bicycle')}}" class="m-auto" style="width:auto"
-              enctype="multipart/form-data">
+{{--IF EXISTING SCORE, WE USE THE EDIT ROUTE--}}
+        @if($assessment_score)
+        <form method="post" action="{{route('update-assessment-score',['cid' => $cid, 'assesst_id' => $assesst_id,'sid' => $sid])}}" class="m-auto" style="width:auto" enctype="multipart/form-data">
             @csrf
+            @else
+{{--IF NULL SCORE, WE USE THE POST ROUTE--}}
+                <form method="post" action="{{route('post-assessment-score',['cid' => $cid, 'assesst_id' => $assesst_id,'sid' => $sid])}}" class="m-auto" style="width:auto" enctype="multipart/form-data">
+                    @csrf
+            @endif
 
             <h4 class="text-center text-light my-2">Assessment Score for {{$reviewer_all_data->fullname}}</h4>
-            <input type="number" class="form-control text-center w-100 my-2" placeholder="/100" value="{{$assessment_score->score}}">
-            <button class="btn btn-primary w-100 mb-4 bi bi-upload" type="submit"> Submit Score</button>
+            <input type="number" class="form-control text-center w-100 my-2" name="score" placeholder="/100" value="{{ optional($assessment_score)->score }}">
 
+            @if($assessment_score)
+                <button class="btn btn-warning w-100 mb-4 bi bi-upload" type="submit"> Edit Score</button>
+            @else
+{{--ALSO RELEVANT BUTTONS--}}
+            <button class="btn btn-success w-100 mb-4 bi bi-upload" type="submit"> Submit Score</button>
+            @endif
+
+        </form>
         </form>
     </div>
 
