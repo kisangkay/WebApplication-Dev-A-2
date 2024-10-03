@@ -52,29 +52,29 @@
 
             $courseData = CourseData::with([
                 'user' => function ($query) use ($assesst_id, $cid) {
-                    $query->withCount([
-                        'reviewsSubmitted as review_submitted_count' => function ($query) use ($assesst_id, $cid) {
+                    $query->with([
+                        'reviewsSubmitted' => function ($query) use ($assesst_id, $cid) {
                             $query->where('assessment_id', $assesst_id)
                                 ->where('course_id', $cid);
                         },
-                        'reviewsReceived as review_received_count' => function ($query) use ($assesst_id, $cid) {
+                        'reviewsReceived' => function ($query) use ($assesst_id, $cid) {
                             $query->where('assessment_id', $assesst_id)
                                 ->where('course_id', $cid);
                         },
-                    ])->with(['assessmentScores' => function ($query) use ($assesst_id, $cid) {
-                        $query->where('assessment_id', $assesst_id)
-                            ->where('course_id', $cid);
-                    }]);
+                        'assessmentScores' => function ($query) use ($assesst_id, $cid) {
+                            $query->where('assessment_id', $assesst_id)
+                                ->where('course_id', $cid);
+                        },
+                    ]);
                 }
             ])
                 ->where('course_id', $cid)
-                ->whereHas('user', function ($query) {
-                    $query->where('user_role', 'student'); // Filter based on user_role in the User model
-                })
-                ->paginate(10); // Pagination added here
-//how CAN I APPLY PAGINATION TO THIS GROUPED USER DATA COLLECTION
-//            $groupedResults_paginated = $groupedResults::paginate(1);
+                ->paginate(10);
 
+            $courseData->each(function ($course) use ($assesst_id, $cid) {
+                $course->review_submitted_count = $course->user->reviewsSubmitted->count();
+                $course->review_received_count = $course->user->reviewsReceived->count();
+            });
 
             // Return the data to the view
             return view('list-to-mark-assessments')

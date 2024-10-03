@@ -46,8 +46,8 @@
                         <td class="col">{{ $user_data['user']->user_number }}</td>
                         <td class="col">{{ $user_data['user']->fullname }}</td>
                         <td class="col">{{ $user_data['user']->email }}</td>
-                        <td class="col">{{$user_data['user']['review_submitted_count'] }}</td>
-                        <td class="col">{{$user_data['user']['review_received_count'] }}</td>
+                        <td class="col">{{ $user_data->review_submitted_count }}</td> <!-- Review submitted count -->
+                        <td class="col">{{ $user_data->review_received_count }}</td> <!-- Review received count -->
 
                         <td class="col justify-content-center"><input class="form-control text-center" value="@foreach ($user_data['user']['assessmentScores'] as $scores) {{ $scores->score }}@endforeach" disabled placeholder="/100"></td>
 

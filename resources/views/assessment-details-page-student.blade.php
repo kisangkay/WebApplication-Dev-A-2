@@ -84,7 +84,7 @@
                             <label class="h4" for="reviewtext">Review Text</label>
                             {{-- will look like review_text0 --}}
                             {{-- will look like review_text1 --}}
-                            <textarea class="form-control mb-4" name="review_text{{$total_reviews_different_name_so_submit_button_wont_disable}}" rows="7" placeholder="Your review here"></textarea>
+                            <textarea class="form-control mb-4" name="review_text{{$total_reviews_different_name_so_submit_button_wont_disable}}" id="reviewtext"rows="7" placeholder="Your review here">{{ old('review_text' . $total_reviews_different_name_so_submit_button_wont_disable) }}</textarea>
                             <x-input-error :messages="$errors->get('review_text'.$total_reviews_different_name_so_submit_button_wont_disable)"/>
 {{--                                                    @dd("review_text{$total_reviews_different_name_so_submit_button_wont_disable}[]");--}}
                         </div>

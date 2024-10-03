@@ -8,7 +8,7 @@
     class Course extends Model
     {
         use HasFactory;
-        public function courseData() //function to link course model to course data model,... to retrieve the relevant courses.
+        public function CourseData() //function to link course model to course data model,... to retrieve the relevant courses.
         {
             return $this->hasMany(CourseData::class);
         }
