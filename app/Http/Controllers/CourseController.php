@@ -17,7 +17,9 @@ class CourseController extends Controller
     {
         //TO GET COURSES LOGGED IN USER IS ENROLLED/TEACHING IN:
         $user_id_from_loggeduser = auth()->user()->user_number; //get user snumber
+        $user_id_from_loggeduser = auth()->user()->user_number; //get user snumber
         $courses_for_this_user = Course::whereHas('CourseData', function ($query) use ($user_id_from_loggeduser) {//retrieves all courses BUT FILTERS ones associated with logged in user using Wherehas
+            $query->where('user_number', $user_id_from_loggeduser);//I want to filter courseData by userid
             $query->where('user_number', $user_id_from_loggeduser);//I want to filter courseData by userid
         })->get();
         if (auth()->user()->user_role === 'teacher') {
@@ -54,6 +56,7 @@ class CourseController extends Controller
 //dd($id);
 
         //pick full names of users who are teachers and exist in the coursedata table and course table and COURSE ID IS FROM PAGE $id
+
         $fullnames = User::whereHas('CourseData', function ($query) use ($id) {
             $query->where('course_id', $id); // Check for matching course_id
         })->where('user_role', 'teacher')->get();

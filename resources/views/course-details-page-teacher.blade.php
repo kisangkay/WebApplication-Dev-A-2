@@ -10,6 +10,12 @@
             <li class="breadcrumb-item active" aria-current="page">Courses</li>
         </ol>
     </nav>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('/')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+        </ol>
+    </nav>
     <div class="container py-5">
         {{--        <div class="h2 px-2 text-center">Reviews for {{$items[0]->bicycle_name}}--}}
         <div class="text-center">

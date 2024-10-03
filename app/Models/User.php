@@ -13,8 +13,13 @@ class User extends Authenticatable
     protected $primaryKey = 'user_number'; // user_number is now our primary key not id
     protected $keyType = 'int';
     public $incrementing = false;//user number is primary key  but not AI
+    protected $primaryKey = 'user_number'; // user_number is now our primary key not id
+    protected $keyType = 'int';
+    public $incrementing = false;//user number is primary key  but not AI
     public function courseData() //function to link course model to course data model,... to retrieve the courses a user is enrolled
     {
+
+        return $this->hasMany(CourseData::class, 'user_number', 'user_number');//coursedata table is related to user in that
 
         return $this->hasMany(CourseData::class, 'user_number', 'user_number');//coursedata table is related to user in that
         //one user can have many entries of coursedata
@@ -48,6 +53,7 @@ class User extends Authenticatable
         'fullname',
         'email',
         'password',
+        'user_role',
         'user_role',
     ];
 

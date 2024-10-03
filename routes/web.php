@@ -49,4 +49,5 @@
     Route::get('/top-reviewers', [TopReviewers::class, 'index'])->name('top-reviewers');//Accessible by anyuser
 
     require __DIR__.'/auth.php';
+    require __DIR__.'/auth.php';
 

@@ -22,6 +22,7 @@ class CourseData extends Model
     protected $fillable = [
         'course_id',
         'user_number',
+        'user_number',
         'assessment_id',
     ];
 }
